@@ -1,12 +1,16 @@
 import numpy as np
 
-
 class Graph:
 
-    def __init__(self, numNodes):
-        self.edges = self.init_array(numNodes)
-        self.num_nodes = numNodes
-        self.edge_number = 0
+    def __init__(self, num_nodes=0, matrix = None):
+        if(matrix == None):
+            self.num_nodes = num_nodes
+            self.edges = self.init_array(num_nodes)
+            self.edge_number = 0
+        else:
+            self.edges = matrix
+            self.edge_number = np.count_nonzero(matrix)
+            self.num_nodes = len(matrix)
 
     def add_vertex(self):
         self.edges = np.hstack((self.edges, np.zeros((self.num_nodes, 1))))

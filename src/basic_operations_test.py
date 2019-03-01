@@ -1,11 +1,17 @@
 from graph import Graph
 
 import unittest
-
+import numpy as np
+import os
+dirname = os.path.dirname(__file__)
 
 class TestGraph(unittest.TestCase):
 
+    filename = os.path.join(dirname, '../data/basic.npy')
+
     def setUp(self):
+        #matrix = np.load(self.filename)
+        #self.graph = Graph(matrix)
         self.graph = Graph(8)
         self.create_edges()
 
