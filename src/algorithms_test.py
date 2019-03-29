@@ -12,44 +12,9 @@ class TestGraph(unittest.TestCase):
     filename = os.path.join(dirname, '../data/basic.npy')
 
     def setUp(self):
-        #matrix = np.load(self.filename)
-        #self.graph = Graph(matrix)
+        matrix = np.load(self.filename)
+        self.graph = Graph(matrix=matrix)
         self.algorithms = Algorithms()
-        self.graph = Graph(8)
-        self.create_edges()
-
-    def create_edges(self):
-        self.graph.add_edge(0, 1)
-        self.graph.add_edge(0, 4)
-        self.graph.add_edge(0, 6)
-
-        self.graph.add_edge(1, 2)
-        self.graph.add_edge(1, 3)
-        self.graph.add_edge(1, 7)
-
-        self.graph.add_edge(2, 1)
-        self.graph.add_edge(2, 0)
-        self.graph.add_edge(2, 6)
-
-        self.graph.add_edge(3, 1)
-        self.graph.add_edge(3, 4)
-        self.graph.add_edge(3, 6)
-
-        self.graph.add_edge(4, 1)
-        self.graph.add_edge(4, 2)
-        self.graph.add_edge(4, 5)
-
-        self.graph.add_edge(5, 0)
-        self.graph.add_edge(5, 3)
-        self.graph.add_edge(5, 7)
-
-        self.graph.add_edge(6, 2)
-        self.graph.add_edge(6, 3)
-        self.graph.add_edge(6, 5)
-
-        self.graph.add_edge(7, 0)
-        self.graph.add_edge(7, 1)
-        self.graph.add_edge(7, 4)
 
     def test_density(self):
         old_density = self.algorithms.density(self.graph)

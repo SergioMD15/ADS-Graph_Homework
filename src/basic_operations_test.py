@@ -1,81 +1,70 @@
-from graph import Graph
+from MyGraph import MyGraph
+from Node import Node
 
 import unittest
-import numpy as np
-import os
-dirname = os.path.dirname(__file__)
+
 
 class TestGraph(unittest.TestCase):
 
-    filename = os.path.join(dirname, '../data/basic.npy')
-
     def setUp(self):
-        #matrix = np.load(self.filename)
-        #self.graph = Graph(matrix)
-        self.graph = Graph(8)
-        self.create_edges()
+        self.a = Node('A')
+        self.b = Node('B')
+        self.c = Node('C')
+        self.d = Node('D')
+        self.e = Node('E')
+        self.a.add_neighbors([self.b, self.c, self.e])
+        self.b.add_neighbors([self.a, self.c])
+        self.c.add_neighbors([self.b, self.d, self.a, self.e])
+        self.d.add_neighbor(self.c)
+        self.e.add_neighbors([self.a, self.c])
+        self.g = MyGraph()
+        self.g.add_nodes([self.a, self.b, self.c, self.d, self.e])
 
-    def create_edges(self):
-        self.graph.add_edge(0, 1)
-        self.graph.add_edge(0, 4)
-        self.graph.add_edge(0, 6)
-
-        self.graph.add_edge(1, 2)
-        self.graph.add_edge(1, 3)
-        self.graph.add_edge(1, 7)
-
-        self.graph.add_edge(2, 1)
-        self.graph.add_edge(2, 0)
-        self.graph.add_edge(2, 6)
-
-        self.graph.add_edge(3, 1)
-        self.graph.add_edge(3, 4)
-        self.graph.add_edge(3, 6)
-
-        self.graph.add_edge(4, 1)
-        self.graph.add_edge(4, 2)
-        self.graph.add_edge(4, 5)
-
-        self.graph.add_edge(5, 0)
-        self.graph.add_edge(5, 3)
-        self.graph.add_edge(5, 7)
-
-        self.graph.add_edge(6, 2)
-        self.graph.add_edge(6, 3)
-        self.graph.add_edge(6, 5)
-
-        self.graph.add_edge(7, 0)
-        self.graph.add_edge(7, 1)
-        self.graph.add_edge(7, 4)
-
-    def test_add_vertex(self):
-        old_num_nodes = self.graph.num_nodes
-        self.graph.add_vertex()
-        self.assertGreater(self.graph.num_nodes, old_num_nodes,
-                           "Current number of vertices should be greater than before")
-        self.graph.print('New vertex:')
-        
-
-    def test_remove_vertex(self):
-        old_num_nodes = self.graph.num_nodes
-        self.graph.remove_vertex(4)
-        self.assertLess(self.graph.num_nodes, old_num_nodes,
-                           "Current number of vertices should be less than before")
-        self.graph.print('After removing vertex 4:')
+    def test_add_neighbors(self):
+        self.assertEqual(len(self.e.neighbors), 2)
+        self.e.add_neighbors([self.b, self.d])
+        self.assertEqual(len(self.e.neighbors), 4)
 
     def test_add_edge(self):
-        old_num_edges = self.graph.edge_number
-        self.graph.add_edge(4, 3)
-        self.assertGreater(self.graph.edge_number, old_num_edges,
-                           "Current number of edges should be greater than before")
-        self.graph.print('After adding an edge from vertex 4 to vertex 3:')
+        print("\nBefore adding the new edges:\n", self.g.print_list())
+
+        len_previous = len(self.g.nodes[self.a.name])
+        self.g.add_edge(self.a, self.d)
+        len_after = len(self.g.nodes[self.a.name])
+        self.assertLess(len_previous, len_after)
+
+        len_previous = len(self.g.nodes[self.d.name])
+        self.g.add_edges([[self.b, self.d], [self.d, self.e]])
+        len_after = len(self.g.nodes[self.d.name])
+        self.assertLess(len_previous, len_after)
+
+        print("\nAfter adding the new edges:\n", self.g.print_list())
+        print(self.g.print_matrix())
+
+    def test_remove_node(self):
+        print("\nBefore removing the node:\n", self.g.print_list())
+
+        len_previous = len(self.g.nodes)
+        self.g.remove_node(self.a)
+        len_after = len(self.g.nodes)
+        self.assertLess(len_after, len_previous)
+
+        print("\nAfter removing the node:\n", self.g.print_list())
 
     def test_remove_edge(self):
-        old_num_edges = self.graph.edge_number
-        self.graph.remove_edge(4, 5)
-        self.assertLess(self.graph.edge_number, old_num_edges,
-                           "Current number of nodes should be less than before")
-        self.graph.print('After adding an edge from vertex 4 to vertex 5:')
+        print("\nBefore removing the edge:\n", self.g.print_list())
+
+        len_previous = len(self.g.nodes[self.a.name])
+        self.g.remove_edge([self.a, self.e])
+        len_after = len(self.g.nodes[self.a.name])
+        self.assertLess(len_after, len_previous)
+
+        print("\nAfter removing the edge:\n", self.g.print_list())
+
+    def test_dijkstra(self):
+
+        array = self.g.dijsktra
+        print(array)
 
 
 if __name__ == '__main__':
